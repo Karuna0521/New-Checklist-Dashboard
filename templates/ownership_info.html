@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'bootstrap-4.6.2-dist/css/bootstrap.min.css' %}" >
+    <script src="{% static 'bootstrap-4.6.2-dist/js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body class="">
+    <div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 threatAssessmentSideMenu">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <span class="fs-5 d-none d-sm-inline">Threat Assessment</span>
+                </a>
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+
+                    <li>
+                        <a href="/dashboard_app/ownership_info?user={{user}}&app_name={{app_name}}" class="nav-link px-0 align-middle active">
+                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Ownership Information</span></a>
+                    </li>
+                    <li>
+                        <a href="/dashboard_app/company_related_info?user={{ user }}&app_name={{app_name}}" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Company Related Information</span></a>
+                    </li>
+                    <li>
+                        <a href="/dashboard_app/services_and_security?user={{user}}&app_name={{app_name}}" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Services & Security</span> </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard_app/privacy_policy?user={{user}}&app_name={{app_name}}" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Privacy Policy</span> </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard_app/data_related_info?user={{user}}&app_name={{app_name}}" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Data Related Info</span> </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard_app/insecure_data_storage?user={{user}}&app_name={{app_name}}" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Insecure Data Storage</span> </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard_app/cryptography?user={{user}}&app_name={{app_name}}" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Cryptography</span> </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard_app/network_communication?user={{user}}&app_name={{app_name}}" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Network Communication</span> </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard_app/platform_interaction?user={{user}}&app_name={{app_name}}" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Platform Interaction</span> </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard_app/pgrm?user={{user}}&app_name={{app_name}}" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Public Grievance Redressal Mechanism</span> </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard_app/result?user={{user}}&app_name={{app_name}}" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">RESULT</span> </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div>
+           <form method="post" action="{% url 'company_related_info' %}?user={{user}}&app_name={{app_name}}">
+            {% csrf_token %}
+            <div class="jumbotron">
+                <h3 class="display-8">Ownership Information!</h3>
+                <hr class="my-4">
+                <input type="hidden" id="md5" name="md5" value="{{md5}}" />
+                {% for q in questions %}
+                 <b>{{ forloop.counter }}. {{ q }}</b>
+                    <div class="form-check">
+                        {% for o in options %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="{{ o.id }}" name="{{ q }}" value="{{ o.option_text }}" required>
+                            <label class="form-check-label" for="{{ o.id }}">{{ o.option_text }}</label>
+                        </div>
+                        {% endfor %}
+                        <br>
+                    </div>
+                {% endfor %}
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit">Save and Next!</button>
+              </span>
+            </div>
+           </form>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

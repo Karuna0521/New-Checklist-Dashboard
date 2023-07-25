@@ -1,0 +1,259 @@
+
+body{
+   /* background: linear-gradient(90deg, #FEB6EA, #B293D8); */
+     overflow-x:hidden;
+}
+ .dashBoardUser,.appCategoryBody,threatAssessmentSideMenu,.dashBoardadmin,.manageQue,.manageUsers {
+        background:hsl(218, 41%, 15%);
+
+        }
+
+li.nav-item .nav-link,.logoutBtn a{
+font-size:1.05rem !important;
+}
+.form-group{
+display:flex;
+width:100%
+}
+.float-right{
+float:right;
+}
+.pxl-2{
+padding-left:1rem;
+}
+.nav-item.active a , li a.nav-link:hover{
+color:#fff !important;
+}
+
+/* ------------------------------------------------
+                Login
+  ---------------------------------------------- */
+
+  .footerList{
+  display:flex;
+  justify-content: space-evenly;
+      list-style: none;
+  }
+  .footerList li a{
+  color:#fff;
+  text-decoration:none;
+  }
+  .hrLine {
+  width: 80%;
+    margin: 0 auto;
+    color: #fff;
+}
+
+
+ /* ------------------------------------------------
+                User Dashboard
+  ---------------------------------------------- */
+
+
+       table{
+       /* border-spacing: 5px;
+        border-collapse: inherit !important; */
+        }
+        table thead{
+        background:#35507e;
+        color:#fff;
+        }
+        .mainUserTable{
+        border:1px solid #9cc1f7;
+
+        }
+          td.table-primary1.appNameTableData {
+             /*    background: linear-gradient(45deg, #0d6efd, #8fb8f6);
+                border-radius:15px 0 0 15px; */
+                padding:15px 0px 15px 20px;
+                background : #e9ecf8;
+            }
+            td.table-primary1.appIdTableData {
+              /*  background: linear-gradient(45deg, #639cf2, #abcaf8); */
+               padding:15px 0px 15px 20px;
+               background:#fff;
+
+            }
+            td.table-primary1.riskRatingTableData {
+               /* background: linear-gradient(45deg, #0d6efd, #8fb8f6); */
+                padding:15px 0px 15px 20px;
+                background : #e9ecf8;
+            }
+            td.table-primary1.tableBtnResult {
+                /* background: linear-gradient(45deg, #2d446c, #0d6efd);
+                background: linear-gradient(45deg, #639cf2, #abcaf8);
+                border-radius: 0 15px 15px 0; */
+                background:#fff;
+
+            }
+            .tableBtnResult form button{
+            background:#0d6efd;
+            border-color:#0d6efd;
+            color:#fff;
+            }
+            .tableBtnResult form button:hover{
+            background:#0d6efd;
+            border-color:#0d6efd;
+            color:#fff;
+            }
+             .tableBtnResult form{
+             padding:5px 0;
+             }
+             .logoHeader img{
+             max-width:100%;
+             width:100px;
+             }
+             ul.navbarHeader{
+                    width:100%;
+             }
+             .logoutBtn a, .logoutBtn a:hover ,li a.nav-link  {
+             color:#ffffff91 !important;
+             }
+<!--             .tableBody tr:hover{-->
+<!--             background-color:#670a9c !important;-->
+<!--             }-->
+
+  /* ------------------------------------------------
+                User application form
+  ---------------------------------------------- */
+             .form-outline.form-group{
+             display:flex;
+             width:100%;
+                 align-items: center;
+             }
+             .form-outline.form-group label{
+             width:40%;
+             text-align:left;
+             color:#000;
+             }
+             .formHeading h2,p{
+             color:#000;
+             }
+             .formCard{
+             width:850px;
+             margin:auto;
+             }
+             .submitBtn button{
+             background:#0d6efd;
+             }
+             .formHeading form{
+             background: #f7fafc;
+            padding: 3rem;
+             }
+             .submitBtn{
+                background:#4f5f7c;
+                 color:#fff;
+                }
+                .submitBtn:hover{
+                background:#172236;
+                 color:#fff;
+                }
+             .form-control-lg {
+                min-height: calc(1.5em + 0.8rem + 2px);
+                padding: .5rem 1rem;
+                font-size: 1rem;
+                border-radius: .3rem;
+            }
+            /* ------------------------------------------------
+                App Category
+  ---------------------------------------------- */
+
+            .appCategory tbody tr:nth-child(even) , .appCategoryHeading{
+                background:#e9ecf8;
+            }
+             .appCategory tbody tr:nth-child(odd){
+                background:#fff;
+            }
+            .appCategory{
+            margin-top:-7px;
+            }
+            /*  .appCategory td, .appCategory thead tr{
+                text-align:center;
+            }
+            .catFormTable{
+            width:75%;
+            } */
+
+            /* ------------------------------------------------
+                Categories Side Menu
+  ---------------------------------------------- */
+
+            .threatAssessmentSideMenu{
+                background:hsl(218, 41%, 15%);
+            }
+            .nav-pills li{
+            width:100%;
+            text-align:left;
+
+            }
+            .nav-pills .nav-link.active{
+            padding:10px 20px;
+            }
+
+            /* ------------------------------------------------
+                User result
+  ---------------------------------------------- */
+        .userResultHeader{
+        display:flex;
+        align-items:center;
+        padding:1rem 2rem;
+        background:#e9ecef;
+        }
+        .userResultHeader img{
+        max-width:100%;
+        width:130px;
+        }
+        .userResultTable{
+        width:800px;
+        margin:auto;
+        }
+       /*  .threatAssessmentResult #myChart{
+        width:700px !important;
+        height:410px !important;
+        margin:auto;
+        } */
+
+        /* ------------------------------------------------
+               Manage Question
+  ---------------------------------------------- */
+
+        .formCardManage{
+            width: 1000px;
+            margin: auto;
+            padding: 2rem;
+        }
+        .formCardManage .chooseCat label{
+        width:17%;
+        font-weight:700;
+        }
+        .formQuestion label, .formOption label{
+        width:25%;
+        font-weight:700;
+        }
+
+        .manageQueTable tbody tr:nth-child(even) {
+                background:#e9ecf8;
+            }
+             .manageQueTable tbody tr:nth-child(odd){
+                background:#fff;
+            }
+
+   /* ------------------------------------------------
+               Manage Users
+  ---------------------------------------------- */
+
+          .activeRow{
+          width:5%;
+          padding:15px 22px !important;
+          }
+          .pwRoaw{
+          padding:14px 10px !important;
+          }
+          .manageUsers table td{
+          border:none;
+          }
+          .updateBtn{
+          background:#0d6efd;
+          border0color:#0d6efd;
+          color:#fff;
+          }

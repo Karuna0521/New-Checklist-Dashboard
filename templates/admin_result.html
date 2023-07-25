@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Threat Assessment Result</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'bootstrap-5.1.3-dist/css/bootstrap.min.css' %}" >
+    <script src="{% static 'bootstrap-5.1.3-dist/js/bootstrap.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-doughnutlabel"></script>
+    <script src="{% static 'js/chart.js/dist/Chart.js' %}"></script>
+</head>
+<body>
+        <div class="jumbotron1 userResultHeader" style="display:flex">
+            <a class="navbar-brand" href="/dashboard_app/admin_dashboard/?user={{user}}">
+                <img src="{% static 'CDAC_Logo.png' %}" style="margin: -20px 0px 0px -20px; width:170px; height: 100px;" >
+            </a>
+            <h1 class="display-5" style="margin: 0px 0px 0px -32px;">Mobile Application Threat Assessment Checklist Result</h1>
+        </div>
+    <div class="jumbotron1 userResultTable py-5">
+        <div style="justify-content: center;place-content: space-evenly;">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Information</th>
+                    <th>Details</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>App Name</td>
+                        <td>{{ app_info.app_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Package Name</td>
+                        <td>{{ app_info.package_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Main Activity</td>
+                        <td>{{ app_info.main_activity }}</td>
+                    </tr>
+                    <tr>
+                        <td>App Version</td>
+                        <td>{{ app_info.app_version }}</td>
+                    </tr>
+                    <tr>
+                        <td>Md5</td>
+                        <td>{{ app_info.md5 }}</td>
+                    </tr>
+                    <tr>
+                        <td>Sha256</td>
+                        <td>{{ app_info.sha256 }}</td>
+                    </tr>
+                    <tr>
+                        <td>App Url</td>
+                        <td>{{ app_info.app_url }}</td>
+                    </tr>
+                    <tr>
+                        <td>Tester</td>
+                        <td>{{ app_info.tester }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+        <div class="threatAssessmentResult py-4 jumbotron">
+            <div  style="width:800px; margin:auto;" >
+                 <h3 class="text-center">Threat Assessment Result</h3>
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+        <div  class="riskAnalyser py-4">
+            <div style="width:800px; margin:auto;" >
+                 <h3 class="text-center">Risk Analyser</h3>
+                <canvas id="pieChart" ></canvas>
+            </div>
+        </div>
+        <div class="jumbotron">
+
+        <div  style="width:800px; margin:auto;" >
+             <h3 class="text-center">Category Wise Risk Rating</h3>
+            <canvas id="categoryWiseRiskRatingChart" ></canvas>
+        </div>
+        </div>
+
+    <script>
+        function loadBarChart() {
+        let json_contents = {{ final_count|safe }};
+        console.log( json_contents);
+        let data_labels = Object.keys(json_contents);
+        let data_values = Object.values(json_contents);
+
+        let bar_colors = ['rgb(20, 139, 56)', 'rgb(225, 225, 0)', 'rgb(240, 50, 50)', 'rgb(139, 0, 0)'];
+        let datasets = [{
+            label: 'Threat Assessment Checklist',
+            data :  data_values,
+            backgroundColor : bar_colors
+        }]
+        console.log(datasets);
+        let options = {
+            responsive: true,
+            title : {
+                    display: true,
+<!--                    text: 'Threat Assessment Result'-->
+                },
+            plugins: {
+                legend: false,
+
+            },
+            scales: {
+                yAxes: [{
+                    display: true,
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+                }
+            };
+        let ctx = document.getElementById('myChart').getContext('2d');
+        let myChart = new Chart(ctx, {
+          type: 'bar',
+          options : options,
+          data: {
+            labels: data_labels,
+            datasets: datasets
+          }
+        });
+    }
+    loadBarChart();
+
+    function loadCategoryWiseRiskRating() {
+        let json_contents = {{ category_wise_risk_rating|safe }};
+        console.log( json_contents);
+        let data_labels = Object.keys(json_contents);
+        let data_values = Object.values(json_contents);
+
+        let bar_colors = ['rgb(235, 70, 52)', 'rgb(255, 247, 23)', 'rgb(182, 255, 23)', 'rgb(255, 23, 104)', 'rgb(23, 255, 205)',
+        'rgb(255, 234, 71)', 'rgb(58, 68, 201)', 'rgb(250, 115, 5)', 'rgb(246, 250, 5)', 'rgb(250, 5, 246)'];
+        let datasets = [{
+            label: 'Category Wise Risk Rating',
+            data :  data_values,
+            backgroundColor : bar_colors
+        }]
+        console.log(datasets);
+        let options = {
+            responsive: true,
+            title : {
+                    display: true,
+<!--                    text: 'Category Wise Risk Rating'-->
+                },
+            plugins: {
+                legend: false,
+
+            },
+            scales: {
+                yAxes: [{
+                    display: true,
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+                }
+            };
+        let ctx = document.getElementById('categoryWiseRiskRatingChart').getContext('2d');
+        let myChart = new Chart(ctx, {
+          type: 'bar',
+          options : options,
+          data: {
+            labels: data_labels,
+            datasets: datasets
+          }
+        });
+    }
+    loadCategoryWiseRiskRating();
+
+    function loadDoughnutChart() {
+    let json_contents = {{ final_count|safe }}
+
+    let data_labels = Object.keys(json_contents);
+    let data_values = Object.values(json_contents);
+
+    let bar_colors = ['rgb(20, 139, 56)', 'rgb(225, 225, 0)', 'rgb(240, 50, 50)', 'rgb(139, 0, 0)'];
+    let datasets = [{
+        label: 'Threat Assessment Checklist',
+        data :  data_values,
+        backgroundColor : bar_colors
+    }]
+    console.log(datasets);
+    let options = {
+        responsive: true,
+        legend: {position:'right', display:true, rtl : false, padding: 0},
+        title : {
+                display: true,
+<!--                text: 'Risk Analyser',-->
+
+                font: {
+                        size: 150,
+                        weight: 'bold'
+                    },
+            },
+        plugins: {
+            doughnutlabel: {
+            labels: [
+                {
+                    text: 'Rating: {{risk_rating}}/10',
+                    font: {
+                        size: '52'
+                    },
+                    color: 'black',
+                    align: 'center'
+                },
+            ]
+    }
+        },
+
+        };
+    let ctx = document.getElementById('pieChart').getContext('2d');
+    let pieChart = new Chart(ctx, {
+      type: 'doughnut',
+      options : options,
+      data: {
+        labels: data_labels,
+        datasets: datasets
+      }
+    });
+    }
+    loadDoughnutChart();
+    </script>
+</body>
+</html>
