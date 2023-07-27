@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from mongoengine import ImproperlyConfigured
 from django.conf import settings
 from checklist_dashboard import settings
-from .models import User, QuestionList, Options, AnswerData, App_Info, Category_Weightage
+from .models import User, QuestionList, Options, AnswerData, App_Info, Category_Weightage, ChecklistCategory
 from .forms import RegistrationForm
 from .forms import LoginForm, AppInfoForm
 import json
@@ -20,7 +20,7 @@ from django.http import HttpResponseBadRequest
 from django.http import FileResponse
 
 import os
-
+from django.core.signing import Signer
 
 # Create your views here.
 
@@ -36,16 +36,43 @@ def login(request):
             user = users[0]
             if user['password'] == input_password:
                 if user['enable']:
+                    email_signer = Signer()
+                    signed_email = email_signer.sign_object(input_email)
                     if user['role'] == 'user':
                         return redirect('/dashboard_app/collective_checklist?user=' + user['email'])
                     else:
-                        return redirect('/dashboard_app/admin_dashboard?user=' + user['email'])
+                        return redirect('/dashboard_app/checklist_category?user=' + user['email'])
                 message = 'Please contact Admin to enable your account.'
                 return render(request, 'login.html', {'form': form, 'message': message})
             message = 'Invalid credentials !!! Please try again.'
             return render(request, 'login.html', {'form': form, 'message': message})
         message = 'User not found with email ' + input_email + '. Please register !'
     return render(request, 'login.html', {'form': form, 'message': message})
+
+
+def checklist_category(request):
+    user = request.GET.get('user')
+    print("****----->", request)
+    if request.method == 'POST':
+        new_checklist_category = request.POST.get('category_type')
+        new_category = [new_checklist_category]
+        print("----->", new_category)
+        if len(new_category) != 0:
+            old_category = ['checklist_type']
+            updated_checklist_category = [*old_category, *new_category]
+            updated_checklist_category = list(set(updated_checklist_category))
+            ChecklistCategory.objects.update(
+                checklist_type=updated_checklist_category
+            )
+        else:
+            ChecklistCategory.objects.create(
+                checklist_type=new_category
+            )
+    checklist_type = list(ChecklistCategory.objects.all())
+    display_checklist_type = []
+    for types in checklist_type:
+        display_checklist_type.append({'checklist_type': types})
+    return render(request, 'checklist_category.html', {'user': user})
 
 
 def collective_checklist(request):
@@ -92,7 +119,7 @@ def question_upload(request):
         }
         new_questions = request.FILES['myfile']
         file_ext = request.FILES['myfile'].name.rsplit('.', 1)[1].lower()
-        print(file_ext,'file-->',new_questions)
+        print(file_ext, 'file-->', new_questions)
         if file_ext == 'xlsx':
             dataset = Dataset()
             data_import = dataset.load(new_questions.read(), format='xlsx')
@@ -101,7 +128,7 @@ def question_upload(request):
                     row_category = row[0]
                     que = row[1]
                     questions = [que]
-                    print(row_category,'row-->',questions)
+                    print(row_category, 'row-->', questions)
                     if row_category is not None and que is not None:
                         category = category_name_map[row_category]
                         category_wise_question = QuestionList.objects.filter(category=category).values()
@@ -120,13 +147,13 @@ def question_upload(request):
                             )
 
                 return render(request, 'manage_questions.html',
-                                      {'import': True, 'message': 'File Imported Successfully..!'})
+                              {'import': True, 'message': 'File Imported Successfully..!'})
             else:
                 return render(request, 'manage_questions.html',
-                              {'import': False, 'message': 'File import failed ! PLease try again.','user': user})
+                              {'import': False, 'message': 'File import failed ! PLease try again.', 'user': user})
         else:
             return render(request, 'manage_questions.html',
-                          {'import': True, 'message': 'Please import file with ".xlsx" extension','user': user})
+                          {'import': True, 'message': 'Please import file with ".xlsx" extension', 'user': user})
     return render(request, 'manage_questions.html', {'user': user})
 
 
@@ -611,7 +638,7 @@ def admin_dashboard(request):
 
 def user_dashboard(request):
     user = request.GET.get('user')
-    checklist_category = request.POST.get('checklist_category')
+    # checklist_category = request.POST.get('checklist_category')
     apps_risk_ratings = []
     apps = list(App_Info.objects.filter(tester=user))
     for a in apps:

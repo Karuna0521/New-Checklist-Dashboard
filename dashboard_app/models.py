@@ -30,6 +30,11 @@ class User(models.Model):
     enable = models.BooleanField(blank=False, default=False)
 
 
+class ChecklistCategory(models.Model):
+    checklist_type = models.JSONField(null=True, blank=True, default=[])
+    objects = models.DjongoManager()
+
+
 class QuestionList(models.Model):
     # id = models.IntegerField(primary_key=True)
     category = models.CharField(max_length=500, blank=False)
