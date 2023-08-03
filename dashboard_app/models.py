@@ -31,7 +31,7 @@ class User(models.Model):
 
 
 class ChecklistCategory(models.Model):
-    checklist_type = models.JSONField(null=True, blank=True, default=[])
+    checklist_type = models.CharField(max_length=500, blank=False)
     objects = models.DjongoManager()
 
 

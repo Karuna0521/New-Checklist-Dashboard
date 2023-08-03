@@ -52,34 +52,33 @@ def login(request):
 
 def checklist_category(request):
     user = request.GET.get('user')
-    print("****----->", request)
+    message = ''
+    old_category_types = []
     if request.method == 'POST':
-        new_checklist_category = request.POST.get('category_type')
-        new_category = [new_checklist_category]
-        print("----->", new_category)
-        if len(new_category) != 0:
-            old_category = ['checklist_type']
-            updated_checklist_category = [*old_category, *new_category]
-            updated_checklist_category = list(set(updated_checklist_category))
-            ChecklistCategory.objects.update(
-                checklist_type=updated_checklist_category
-            )
-        else:
+        new_category = request.POST.get('category_text')
+        new_category = new_category.title()
+        old_category = list(ChecklistCategory.objects.all())
+        local_category_list = []
+        for category_obj in old_category:
+            old_category_types.append({"checklist_type": category_obj.checklist_type})
+            local_category_list.append(category_obj.checklist_type.title())
+        if new_category not in local_category_list:
+            old_category_types.append({"checklist_type": new_category})
             ChecklistCategory.objects.create(
                 checklist_type=new_category
             )
-    checklist_type = list(ChecklistCategory.objects.all())
-    display_checklist_type = []
-    for types in checklist_type:
-        display_checklist_type.append({'checklist_type': types})
-    return render(request, 'checklist_category.html', {'user': user})
+            message = new_category + ' Added Successfully!!'
+        else:
+            message = new_category + ' Already exists!'
+    return render(request, 'checklist_category.html', {'user': user, 'message': message, 'old_category_types': old_category_types})
 
 
 def collective_checklist(request):
     user = request.GET.get('user')
     checklist_type = request.POST.get('checklist_category')
     if checklist_type == 'mobile_checklist':
-        return render(request, 'user_dashboard.html', {'user': user})
+        apps_risk_ratings = get_apps_risk_rating_by_user(user)
+        return render(request, 'user_dashboard.html', {'user': user, 'apps_risk_ratings': apps_risk_ratings})
     elif checklist_type == 'web_checklist':
         return render(request, 'web_user_dashboard.html', {'user': user})
     return render(request, 'collective_checklist.html', {'user': user})
@@ -158,7 +157,7 @@ def question_upload(request):
 
 
 def download_excel(request):
-    file_path = os.path.join(settings.STATICFILES_DIRS[0], 'files', 'Template.xlsx')
+    file_path = os.path.join(settings.STATICFILES_DIRS[0], 'Template.xlsx')
     response = FileResponse(open(file_path, 'rb'), content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename="SampleTemplate.xlsx"'
     return response
@@ -625,7 +624,6 @@ def admin_dashboard(request):
     user = request.GET.get('user')
     apps_risk_ratings = []
     apps = list(App_Info.objects.all())
-
     for a in apps:
         name = a.app_name
         tester = a.tester
@@ -636,9 +634,7 @@ def admin_dashboard(request):
     return render(request, 'admin_dashboard.html', {'apps_risk_ratings': apps_risk_ratings, 'user': user})
 
 
-def user_dashboard(request):
-    user = request.GET.get('user')
-    # checklist_category = request.POST.get('checklist_category')
+def get_apps_risk_rating_by_user(user):
     apps_risk_ratings = []
     apps = list(App_Info.objects.filter(tester=user))
     for a in apps:
@@ -646,4 +642,11 @@ def user_dashboard(request):
         if len(answer_data) > 0:
             data = process_answer(a.app_name)
             apps_risk_ratings.append({'app_name': a.app_name, 'md5': a.md5, 'risk_rating': data['risk_rating']})
+    return apps_risk_ratings
+
+
+def user_dashboard(request):
+    user = request.GET.get('user')
+    # checklist_category = request.POST.get('checklist_category')
+    apps_risk_ratings = get_apps_risk_rating_by_user(user)
     return render(request, 'user_dashboard.html', {'user': user, 'apps_risk_ratings': apps_risk_ratings})

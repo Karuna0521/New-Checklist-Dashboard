@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('login/', views.login, name='login'),
     path('registration/', views.registration, name='registration'),
-    path('checklist_category/', views.checklist_category),
+    path('checklist_category/', views.checklist_category, name='checklist_category'),
     path('collective_checklist/', views.collective_checklist),
     path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('manage_questions/', views.manage_questions),

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body class="manageQue" style="padding-top: 50px;">
-    <div class="card formCardManage" >
+    <div class="card formCardManage">
         <div class="container">
             <form method="post" action="{% url 'admin_dashboard' %}?user={{ user }}">
                 {% csrf_token %}
@@ -18,21 +18,32 @@
                 <div class="col-sm-10">
                     <select name="checklist_category" class="form-control form-control-lg dropDownSelect" id="checklist_category" required>
                     <option value="">-- Choose Checklist Category</option>
-                    <option value="mobile_checklist">Mobile Threat Assessment Checklist</option>
-                    <option value="web_checklist">Web Application Checklist</option>
+                    {% for category in old_category_types %}
+                        <option value="{{category.checklist_type}}">{{category.checklist_type}}</option>
+                    {% endfor%}
                     </select>
-                </div>
-            </div>
-            <div class="form-group  py-3 formQuestion">
-                <label for="category_type" class="">Add New Checklist Category</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control" id="category_type" name="category_type" placeholder="Enter Checklist Category to add in database" value="">
                 </div>
             </div>
             <div class="float-right py-2">
                 <button class="btn btn-outline-light1 btn-lg px-5 submitBtn" type="submit">Submit..!</button>
             </div>
             </form>
+            <br>
+            <form method="post" action="{% url 'checklist_category' %}?user={{ user }}">
+                {% csrf_token %}
+            <div class="form-group  py-3 formQuestion">
+                <label for="category_text" class="">Add New Checklist Category</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="category_text" name="category_text" placeholder="Enter Checklist Category to add in database" value="">
+                </div>
+            </div>
+            <div class="float-right py-2">
+                <button class="btn btn-outline-light1 btn-lg px-5 submitBtn" type="submit">Add</button>
+            </div>
+            </form>
+            {% if message %}
+              <h4>{{ message }}</h4>
+            {% endif %}
         </div>
     </div>
 </body>
