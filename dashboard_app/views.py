@@ -27,6 +27,7 @@ from django.core.signing import Signer
 
 def login(request):
     form = LoginForm(request.POST)
+    print('This is login function')
     message = ''
     if form.is_valid():
         input_email = form.cleaned_data['email']
